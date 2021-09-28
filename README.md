@@ -1,3 +1,3 @@
 # ECE373Project
 
-Created by Dylan Etson, Colin Herbet, and Noah Butler
+Created by Dylan Etson, Colin Herbert, and Noah Butler
