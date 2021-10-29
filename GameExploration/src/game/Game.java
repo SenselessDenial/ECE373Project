@@ -4,6 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
+import javax.swing.JFrame;
+
+import game.util.BFrame;
+import game.util.Draw;
+import game.util.Input;
+import game.util.Logger;
+import game.util.Screen;
+
 public class Game {
 	
 	public BFrame bFrame;
@@ -42,7 +50,7 @@ public class Game {
 		Draw.initialize();
 		
 		
-		screen = new Screen(500, 500);
+		screen = new Screen(1920, 1080);
 		bFrame = new BFrame(screen);
 		bFrame.setVisible(true);
 		
@@ -155,7 +163,7 @@ public class Game {
 		bs.show();
 	}
 	
-	protected static void exit() {
+	public static void exit() {
 		Logger.Log("Game is exiting!");
 		System.exit(0);
 	}

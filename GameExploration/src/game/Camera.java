@@ -4,18 +4,20 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
+import game.colliders.BoxCollider;
+
 public class Camera {
 	
 	private AffineTransform matrix;
 	private AffineTransform scaleMatrix;
 	private AffineTransform translateMatrix;
 	
-	public Rectangle boundaries;
-	public Vector2 position;
 	private Vector2 scale;
 	private Vector2 origin;
 	private float angle;
-	private Rectangle viewport;
+	
+	public Rectangle boundaries;
+	private BoxCollider viewport;
 	
 	private Boolean isUpdated;
 	
@@ -33,9 +35,8 @@ public class Camera {
 		
 		boundaries = null;
 		scale = new Vector2(1, 1);
-		position = new Vector2(0, 0);
 		angle = 0f;
-		viewport = new Rectangle(width, height);
+		viewport = new BoxCollider(0, 0, width, height);
 		isUpdated = false;
 		origin = new Vector2(viewport.width / 2, viewport.height / 2);
 		this.renderer = renderer;
@@ -53,9 +54,15 @@ public class Camera {
 		isUpdated = false;
 	}
 	
+	public void setScale(float scale) {
+		this.scale.x = scale;
+		this.scale.y = scale;
+		isUpdated = false;
+	}
+	
 	public void translate(float x, float y) {
-		position.x += x;
-		position.y += y;
+		viewport.x += x;
+		viewport.y += y;
 		//origin.x += x;
 		//origin.y += y;
 		isUpdated = false;
@@ -84,21 +91,23 @@ public class Camera {
 		
 		matrix.translate(origin.x, origin.y);
 		matrix.scale(scale.x, scale.y);
-		matrix.translate(-position.x, -position.y);
+		matrix.translate(-viewport.x, -viewport.y);
 		matrix.translate(-origin.x, -origin.y);
+		
 		
 		isUpdated = true;
 	}
 	
 	public void updateTarget() {
 		if (target != null) {
-			this.position = target.position;
+			viewport.setTopLeft(target.position);
 		}
 	}
 	
 	public void update() {
 		if (isUpdated == false) {
 			updateTarget();
+			checkBoundaries();
 			updateMatrix();
 		}
 			
@@ -121,26 +130,36 @@ public class Camera {
 	
 	private void checkBoundaries() {
 		if (boundaries != null) {
-			if (position.x < boundaries.x) {
-				position.x = boundaries.x;
+			if (viewport.getRight() > boundaries.width + boundaries.x) {
+				viewport.setRight(boundaries.width + boundaries.x);
 			}
-			if (position.y < boundaries.y) {
-				position.y = boundaries.y;
+			if (viewport.getBottom() > boundaries.y + boundaries.height) {
+				viewport.setBottom(boundaries.y + boundaries.height);
+			}
+			if (viewport.x < boundaries.x) {
+				viewport.x = boundaries.x;
+			}
+			if (viewport.y < boundaries.y) {
+				viewport.y = boundaries.y;
 			}
 		}
 		
 	}
 	
-	private void setTopLeft(Vector2 position) {
-		this.position = position;
+	public Vector2 getPosition() {
+		return new Vector2(viewport.x, viewport.y);
 	}
 	
-	private void setTopRight(Vector2 position) {
-		this.position = new Vector2(position.x - viewport.width, position.y);
+	public void setViewport(float x, float y, float width, float height) {
+		viewport.x = x;
+		viewport.y = y;
+		viewport.width = width;
+		viewport.height = height;
 	}
 	
-	
-	
-	
+	public void setViewport(float width, float height) {
+		viewport.width = width;
+		viewport.height = height;
+	}
 
 }

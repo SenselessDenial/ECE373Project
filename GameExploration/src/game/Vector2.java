@@ -40,5 +40,9 @@ public class Vector2 {
 		return v1.subtract(v2);
 	}
 	
+	@Override
+	public String toString() {
+		return "X: " + this.x + " Y: " + this.y;
+	}
 
 }

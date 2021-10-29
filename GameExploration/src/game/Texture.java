@@ -6,6 +6,10 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import game.util.Calc;
+import game.util.Draw;
+import game.util.Logger;
+
 public class Texture {
 	
 	private BufferedImage texture;
@@ -128,10 +132,6 @@ public class Texture {
 	
 	public Texture getBorder() {
 		return getBorder(Color.black);
-	}
-	
-	public void foo() {
-		
 	}
 	
 }
