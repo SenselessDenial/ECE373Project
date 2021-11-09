@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<spritesheet>
+
+	<sprite name = "right_curtain">
+		<animation name = "wave" delay = "0.2" loops = "true">
+			<texture x = "0" y = "0" width = "398" height = "290" offsetx = "0" offsety = "0"/>
+			<texture x = "398" y = "0" width = "398" height = "290" offsetx = "0" offsety = "0"/>
+			<texture x = "796" y = "0" width = "398" height = "290" offsetx = "0" offsety = "0"/>
+			<texture x = "0" y = "290" width = "398" height = "290" offsetx = "0" offsety = "0"/>
+			<texture x = "398" y = "290" width = "398" height = "290" offsetx = "0" offsety = "0"/>
+			<texture x = "796" y = "290" width = "398" height = "290" offsetx = "0" offsety = "0"/>
+		</animation>
+		
+	</sprite>
+	
+</spritesheet>
