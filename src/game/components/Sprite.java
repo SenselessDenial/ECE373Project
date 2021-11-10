@@ -1,5 +1,6 @@
 package game.components;
 
+import java.awt.Color;
 import java.util.HashMap;
 
 import game.Animation;
@@ -93,6 +94,25 @@ public class Sprite extends Component{
 	@Override
 	public void render() {
 		currAnimation.get(currFrame).render(getRenderPos());
+		
+	}
+	
+	public Sprite tint(Color color) {
+		Sprite temp = new Sprite(this.entity, this.offset, this.name);
+		for (var a : animations.keySet()) {
+			temp.addAnimation(animations.get(a).name, animations.get(a).tint(color));
+		}
+		
+		return temp;
+	}
+	
+	public Sprite brighten(int value) {
+		Sprite temp = new Sprite(this.entity, this.offset, this.name);
+		for (var a : animations.keySet()) {
+			temp.addAnimation(animations.get(a).name, animations.get(a).brighten(value));
+		}
+		
+		return temp;
 	}
 
 }

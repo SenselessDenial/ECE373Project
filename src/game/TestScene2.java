@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 import game.util.Interfaces;
 import game.util.Logger;
 import game.util.Vector2;

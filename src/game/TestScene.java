@@ -48,7 +48,7 @@ public class TestScene extends Scene {
 		
 		dummy = new Entity(0, 0);
 		dummy2 = new Entity();
-		dummyImage = new Picture("testroom.png");
+		dummyImage = new Picture("background.png");
 		dummy.add(dummyImage);
 		add(dummy);
 		button = new InteractiveButton(new Vector2(600,600), this, new Texture("exitbutton.png"), 
@@ -91,7 +91,10 @@ public class TestScene extends Scene {
 		clip.loop(clip.LOOP_CONTINUOUSLY);
 	
 		
-		this.renderer.camera.setBoundaries(new Rectangle(0, 0, 2400, 1600));
+		this.renderer.camera.setBoundaries(new Rectangle(0, 0, 2240, 0));
+		
+		this.renderer.camera.scale(2);
+		this.renderer.camera.setViewport(1920*2, 720*2);
 	}
 	
 	@Override
@@ -122,10 +125,10 @@ public class TestScene extends Scene {
 		}
 		
 		if (Input.check(Keys.A)) {
-			renderer.camera.translate(-4, 0);
+			renderer.camera.translate(-12, 0);
 		} 
 		if (Input.check(Keys.D)) {
-			renderer.camera.translate(4, 0);
+			renderer.camera.translate(12, 0);
 		} 
 		if (Input.check(Keys.W)) {
 			renderer.camera.translate(0, -4);

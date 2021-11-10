@@ -136,10 +136,26 @@ public class Texture {
 	public Texture tint(Color color) {
 		Texture temp = new Texture(this.getWidth(), this.getHeight());
 		
-		for (int x = 0; x < temp.getWidth(); x++) 
-			for (int y = 0; y < temp.getHeight(); y++) 
-				temp.texture.setRGB(x, y, Calc.Multiply(new Color(this.texture.getRGB(x, y), true), color).getRGB());
+		for (int x = clipRect.x; x < temp.getWidth()+clipRect.x; x++) 
+			for (int y = clipRect.y; y < temp.getHeight()+clipRect.y; y++) 
+				temp.texture.setRGB(x-clipRect.x, y-clipRect.y, Calc.Multiply(new Color(this.texture.getRGB(x, y), true), color).getRGB());
 				
+		return temp;
+	}
+	
+	public Texture brighten(int value) {
+		Texture temp = this.clone();
+		
+		for (int x = 0; x < temp.getWidth(); x++) {
+			for (int y = 0; y < temp.getHeight(); y++) {
+				if (temp.getColor(x, y).getAlpha() != 0) {
+					temp.setColor(x, y, new Color((int)Calc.snap(temp.getColor(x, y).getRed()+value, 0, 255),
+							(int)Calc.snap(temp.getColor(x, y).getGreen()+value, 0, 255),
+							(int)Calc.snap(temp.getColor(x, y).getBlue()+value, 0, 255)));
+				}
+				
+			}
+		}
 		return temp;
 	}
 	

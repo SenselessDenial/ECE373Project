@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -54,6 +55,10 @@ public class Animation {
 		return this.timeDelay;
 	}
 	
+	public void setTimeDelay(float timeDelay) {
+		this.timeDelay = timeDelay;
+	}
+	
 	public Texture get(int index) {
 		return this.textures.get(index);
 	}
@@ -64,6 +69,23 @@ public class Animation {
 	
 	public void setOffset(Vector2 offset) {
 		this.offset = offset;
+	}
+	
+	public Animation tint(Color color) {
+		Animation temp = new Animation(this.offset, this.timeDelay, this.isLooping, this.name);
+		for (var t : textures) {
+			temp.addTexture(t.tint(color));
+		}
+		return temp;
+	}
+	
+	public Animation brighten(int value) {
+		Animation temp = new Animation(this.offset, this.timeDelay, this.isLooping, this.name);
+		for (var t : textures) {
+			temp.addTexture(t.brighten(value));
+		}
+		return temp;
+		
 	}
 	
 }

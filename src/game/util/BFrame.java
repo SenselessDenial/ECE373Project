@@ -33,7 +33,7 @@ public class BFrame extends JFrame {
 	    });
 		
 		this.getContentPane().setBackground(new Color(255, 100, 125));
-		
+		this.getContentPane().setBackground(Color.black);
 		setVisible(false);
 		setResizable(false);
 		setLocationRelativeTo(null);
