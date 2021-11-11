@@ -33,6 +33,7 @@ public class Game {
 	public static double deltaTime = 0.0;
 	public double rawTimeElapsed = 0.0;
 	int fps = 0;
+	long memory;
 	
 	public static Game instance;
 	
@@ -57,6 +58,7 @@ public class Game {
 		Input.initialize();
 		Draw.initialize();
 		SceneManager.initialize();
+		GameState.initialize();
 		
 		background = new BScreen(width, height);
 		gameScreen = new BScreen(400, 360);
@@ -140,7 +142,8 @@ public class Game {
 			
 			if (System.currentTimeMillis() - timer >= 1000) {
 				timer += 1000;
-				setTitle("FPS: " + fps);
+				memory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+				setTitle("FPS: " + fps + " | MB: " + String.format("%.2f", (memory / 1000000f)));
 				fps = 0;
 			}
 			
@@ -153,10 +156,10 @@ public class Game {
 		Input.update();
 		
 		if (scene != null) {
-			if (scene.renderer.camera.getWidth() != gameScreen.getWidth()
-		    || scene.renderer.camera.getHeight() != gameScreen.getHeight()) {
-				gameScreen.setBounds(0, 0, Calc.min(scene.renderer.camera.getWidth(), background.getWidth()),
-						                   Calc.min(scene.renderer.camera.getHeight(), background.getHeight()));
+			if (scene.renderer.camera.getWidthPixels() != gameScreen.getWidth()
+		    || scene.renderer.camera.getHeightPixels() != gameScreen.getHeight()) {
+				gameScreen.setBounds(0, 0, Calc.min(scene.renderer.camera.getWidthPixels(), background.getWidth()),
+						                   Calc.min(scene.renderer.camera.getHeightPixels(), background.getHeight()));
 				bFrame.centerScreen(0);
 			}
 			scene.update();

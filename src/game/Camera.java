@@ -9,43 +9,33 @@ import game.util.Vector2;
 
 
 // Camera class that handles moving and zooming in world space.
-// This class is particularly confusing & messy. 
-// Needs a moderate overhaul to refine functionality.
+// Refined since build 0.3.
 public class Camera {
 	
 	private AffineTransform matrix;
-	private AffineTransform scaleMatrix;
-	private AffineTransform translateMatrix;
-	
 	private Vector2 scale;
-	private Vector2 origin;
-	private float angle;
 	
 	public Rectangle boundaries;
-	private BoxCollider trueViewport;
-	private BoxCollider viewport;
+	// Viewport in terms of pixels; The actual viewport on the screen.
+	private BoxCollider viewportPixels;
+	// Viewport in terms of world space units; The viewport in the game.
+	private BoxCollider viewportWorldSpace;
 	
 	private Boolean isUpdated;
 	
 	private Renderer renderer;
 	private Scene scene;
-	private Entity target;
 	
 	public Camera(int width, int height, Renderer renderer) {
 		matrix = new AffineTransform();
-		translateMatrix = new AffineTransform();
-		scaleMatrix = new AffineTransform();
 		
 		boundaries = null;
 		scale = new Vector2(1, 1);
-		angle = 0f;
-		trueViewport = new BoxCollider(0, 0, width, height);
-		viewport = new BoxCollider(0, 0, width, height);
+		viewportPixels = new BoxCollider(0, 0, width, height);
+		viewportWorldSpace = new BoxCollider(0, 0, width, height);
 		isUpdated = false;
-		origin = new Vector2(viewport.width / 2, viewport.height / 2);
 		this.renderer = renderer;
 		this.scene = renderer.scene;
-		target = null;
 	}
 	
 	public Camera(Renderer renderer) {
@@ -65,62 +55,29 @@ public class Camera {
 	}
 	
 	public void translate(float x, float y) {
-		viewport.x += x;
-		viewport.y += y;
-		//origin.x += x;
-		//origin.y += y;
-		isUpdated = false;
-	}
-	
-	public Entity getTarget() {
-		return target;
-	}
-	
-	public void setTarget(Entity target) {
-		this.target = target;
-	}
-	
-	public void removeTarget() {
-		this.target = null;
-	}
-	
-	
-	public void rotate(float angle) {
-		this.angle -= angle;
+		viewportWorldSpace.x += x;
+		viewportWorldSpace.y += y;
 		isUpdated = false;
 	}
 	
 	public void updateMatrix() {
 		matrix.setToIdentity();
 		
-		//matrix.translate(origin.x, origin.y);
 		matrix.scale(scale.x, scale.y);
-		matrix.translate(-viewport.x, -viewport.y);
-		//matrix.translate(-origin.x, -origin.y);
+		matrix.translate(-viewportWorldSpace.x, -viewportWorldSpace.y);
 		
-		viewport.width = trueViewport.width / (this.getScale().x);
-		viewport.height = trueViewport.height / (this.getScale().y);
+		viewportWorldSpace.width = viewportPixels.width / (this.getScale().x);
+		viewportWorldSpace.height = viewportPixels.height / (this.getScale().y);
 		
 		
 		isUpdated = true;
 	}
 	
-	public void updateTarget() {
-		if (target != null) {
-			viewport.setTopLeft(target.position);
-		}
-	}
-	
 	public void update() {
 		if (isUpdated == false) {
-			updateTarget();
 			checkBoundaries();
 			updateMatrix();
 		}
-			
-		
-		//Logger.Log(position.x);
-		//Logger.Log(position.y);
 	}
 	
 	public AffineTransform getMatrix() {
@@ -135,50 +92,72 @@ public class Camera {
 		this.boundaries = null;
 	}
 	
+	private void pixelToWorldSpace() {
+		
+	}
+	
 	private void checkBoundaries() {
 		if (boundaries != null) {
-			if (viewport.getRight() > boundaries.width + boundaries.x) {
-				viewport.setRight(boundaries.width + boundaries.x);
+			if (viewportWorldSpace.getRight() > boundaries.width + boundaries.x) {
+				viewportWorldSpace.setRight(boundaries.width + boundaries.x);
 			}
-			if (viewport.getBottom() > boundaries.y + boundaries.height) {
-				viewport.setBottom(boundaries.y + boundaries.height);
+			if (viewportWorldSpace.getBottom() > boundaries.y + boundaries.height) {
+				viewportWorldSpace.setBottom(boundaries.y + boundaries.height);
 			}
-			if (viewport.x < boundaries.x) {
-				viewport.x = boundaries.x;
+			if (viewportWorldSpace.x < boundaries.x) {
+				viewportWorldSpace.x = boundaries.x;
 			}
-			if (viewport.y < boundaries.y) {
-				viewport.y = boundaries.y;
+			if (viewportWorldSpace.y < boundaries.y) {
+				viewportWorldSpace.y = boundaries.y;
 			}
 		}
 		
 	}
 	
 	public Vector2 getPosition() {
-		return new Vector2(viewport.x, viewport.y);
+		return new Vector2(viewportWorldSpace.x, viewportWorldSpace.y);
 	}
 	
 	@Override
 	public String toString() {
-		return "Camera X: " + viewport.x + " Y: " + viewport.y + " Width: "
-			+  viewport.width + " Height: " + viewport.height;
+		return "Camera X: " + viewportWorldSpace.x + " Y: " + viewportWorldSpace.y + " Width: "
+			+  viewportWorldSpace.width + " Height: " + viewportWorldSpace.height;
 	}
 	
 	public Vector2 getScale() {
 		return this.scale;
 	}
 	
-	public void setViewport(float width, float height) {
-		trueViewport.width = width;
-		trueViewport.height = height;
+	public void setViewportPixels(float width, float height) {
+		viewportPixels.width = width;
+		viewportPixels.height = height;
 		isUpdated = false;
 	}
 	
-	public int getWidth() {
-		return (int)viewport.width;
+	public void setViewportWorldSpace(float width, float height) {
+		viewportWorldSpace.width = width;
+		viewportWorldSpace.height = height;
+		isUpdated = false;
 	}
 	
-	public int getHeight() {
-		return (int)viewport.height;
+	public int getWidthPixels() {
+		return (int)viewportPixels.width;
+	}
+	
+	public int getHeightPixels() {
+		return (int)viewportPixels.height;
+	}
+	
+	public int getWidthWorldSpace() {
+		return (int)viewportWorldSpace.width;
+	}
+	
+	public int getHeightWorldSpace() {
+		return (int)viewportWorldSpace.height;
 	}
 
+	public Vector2 getCenterWorldSpace() {
+		return new Vector2(viewportWorldSpace.x + (viewportWorldSpace.width / 2), 
+						   viewportWorldSpace.y + (viewportWorldSpace.height / 2));
+	}
 }

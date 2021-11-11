@@ -2,6 +2,8 @@ package game;
 
 import java.awt.Color;
 
+import game.enums.Keys;
+import game.util.Input;
 import game.util.Interfaces;
 import game.util.Logger;
 import game.util.Vector2;
@@ -35,8 +37,11 @@ public final class TestScene2 extends Scene {
 	@Override
 	public void update() {
 		super.update();
+
 		
-		Logger.Log(Game.deltaTime);
+		if (Input.check(Keys.F)) {
+			pal.position.x += 2f;
+		}
 	}
 	
 	@Override

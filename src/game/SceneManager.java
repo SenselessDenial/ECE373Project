@@ -13,6 +13,7 @@ public class SceneManager {
 	///STORE SCENES HERE!///
 	private static TestScene t;
 	private static TestScene2 t2;
+	private static SceneExamine e;
 	
 	/////STOP STORING//////
 	
@@ -23,12 +24,14 @@ public class SceneManager {
 		///INSTANTIATE SCENES HERE!///
 		t = new TestScene();
 		t2 = new TestScene2();
+		e = new SceneExamine();
 		
 		///ADD SCENES HERE!///
 		addScene(t, "test");
 		addScene(t2, "test2");
+		addScene(e, "ex");
 		
-		setDefault("test2");
+		setDefault("t2");
 	}
 	
 	public static void addScene(Scene scene, String key) {

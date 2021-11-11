@@ -159,6 +159,8 @@ public class Texture {
 		return temp;
 	}
 	
+	
+	
 	private void setColor(int x, int y, Color color) {
 		this.texture.setRGB(x, y, color.getRGB());
 	}

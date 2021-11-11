@@ -8,6 +8,7 @@ import game.util.Vector2;
 
 // Holds multiple related textures. 
 // Actual swapping of textures takes place in Sprite class.
+// A non-positive timeDelay means that textures can only be swapped manually.
 public class Animation {
 
 	/// Fields
@@ -16,36 +17,71 @@ public class Animation {
 	private float timeDelay;
 	public Boolean isLooping;
 	public String name;
-		
-	private Animation() {
+	
+	/// Constructors
+	private void setup() {
 		textures = new ArrayList<Texture>();
 		offset = new Vector2(0, 0);
 		timeDelay = 0f;
 		isLooping = false;
-		name = "";
+		name = "default";
+	}
+	
+	public Animation(Vector2 offset, float timeDelay, Boolean isLooping, String name, Texture... textures) {
+		setup();
+		this.offset = offset;
+		this.timeDelay = timeDelay;
+		this.isLooping = isLooping;
+		this.name = name;
+		for (var t : textures) {
+			this.textures.add(t);
+		}
 	}
 	
 	public Animation(Vector2 offset, float timeDelay, Boolean isLooping, String name, Collection<Texture> textures) {
-		this();
+		setup();
 		this.offset = offset;
 		this.timeDelay = timeDelay;
 		this.isLooping = isLooping;
 		this.name = name;
-		this.textures.addAll(textures);
+		for (var t : textures) {
+			this.textures.add(t);
+		}
 	}
+	
+	
 	
 	public Animation(Vector2 offset, float timeDelay, Boolean isLooping, String name) {
-		this();
+		setup();
 		this.offset = offset;
 		this.timeDelay = timeDelay;
 		this.isLooping = isLooping;
 		this.name = name;
 	}
 	
+	public Animation(float timeDelay, Boolean isLooping) {
+		this(new Vector2(0,0), timeDelay, isLooping, "default");
+	}
+	
+	public Animation(float timeDelay) {
+		this(new Vector2(0, 0), timeDelay, false, "default");
+	}
+	
+	// Noarg Animation creates a manual, non-looping, no offset, animation named "default".
+	public Animation() {
+		this(-1f);
+	}
+	
+	/// Methods
 	public void addTexture(Texture texture) {
 		textures.add(texture);
 	}
 	
+	public void addTexture(Texture...textures) {
+		for (var t : textures) {
+			this.textures.add(t);
+		}
+	}
 	
 	public int size() {
 		return this.textures.size();
@@ -57,6 +93,10 @@ public class Animation {
 	
 	public void setTimeDelay(float timeDelay) {
 		this.timeDelay = timeDelay;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 	
 	public Texture get(int index) {

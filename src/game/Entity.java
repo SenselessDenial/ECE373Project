@@ -120,5 +120,13 @@ public class Entity implements Iterable<Component> {
 		return components.iterator();
 	}
 	
+	public float getWidth() {
+		return this.hitbox.getWidth();
+	}
+	
+	public float getHeight() {
+		return this.hitbox.getHeight();
+	}
+	
 
 }
