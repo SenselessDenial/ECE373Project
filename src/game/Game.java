@@ -13,6 +13,7 @@ import game.util.Draw;
 import game.util.Input;
 import game.util.Logger;
 import game.util.Vector2;
+import gameLogic.GameState;
 import game.util.BScreen;
 import game.util.Calc;
 

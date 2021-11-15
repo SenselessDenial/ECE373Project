@@ -90,6 +90,12 @@ public class EntityList implements Iterable<Entity> {
 		isLocked = false;
 	}
 	
+	public void clear() {
+        entities.clear();
+        toAdd.clear();
+        toRemove.clear();
+    }
+	
 	public void render() {
 		isLocked = true;
 		updateLists();

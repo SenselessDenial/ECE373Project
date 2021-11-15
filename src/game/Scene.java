@@ -2,6 +2,7 @@ package game;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import game.util.Draw;
@@ -28,9 +29,10 @@ public class Scene {
 		Game.instance.bFrame.setBGColor(bgColor);
 	}
 	
+
 	public void end() {
-		
-	}
+        entities.clear();
+    }
 	
 	public void update() {
 		renderer.update();

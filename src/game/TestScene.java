@@ -24,6 +24,9 @@ import game.util.Input;
 import game.util.Interfaces;
 import game.util.Logger;
 import game.util.Vector2;
+import gameLogic.GameState;
+import gameLogic.Ingress;
+import gameLogic.Larry;
 
 public class TestScene extends Scene {
 	
@@ -37,6 +40,7 @@ public class TestScene extends Scene {
 	int a;
 	BClip miasmajesty;
 	BClip wolves;
+	private Larry larry;
 	
 	public TestScene() {
 		super();
@@ -56,8 +60,40 @@ public class TestScene extends Scene {
 		button = new InteractiveButton(new Vector2(200,10), this, new Texture("exitbutton.png"), 
 				                       new Texture("exitbutton_pressed.png"), Interfaces.GameExit);
 		
+		InteractiveButton corkboardButton = new InteractiveButton(new Vector2(1920/4 + 50, 50), this, new Texture("invisibleCorkButton.png"),
+											new Texture("invisibleCorkButtonPress.png"), Interfaces.GoToCorkboard	);
+		
+		add(corkboardButton);
+		
+		
+		InteractiveButton puzzleButton = new InteractiveButton(new Vector2(1920/4, 200), this, new Texture("invisibleNonoButton.png"),
+				new Texture("invisibleNonoButton.png"), Interfaces.GoToNonogram	);
+
+		add(puzzleButton);
+		
 		add(button);
 		emitter = new SoundEmitter(new Vector2(button.getWidth() / 2, button.getHeight() / 2));
+		
+		
+		larry = new Larry();
+		add(larry);
+		
+		add(GameState.windowright);
+		add(GameState.windowleft);
+		add(GameState.doorright);
+		
+		
+		Spritesheet sheet = new Spritesheet(new Texture("rightcurtain.png"), "rightcurtain.xml");
+		Entity joemama = new Entity(new Vector2(50 , 25), this);
+		joemama.add(sheet.getSprite(0));
+		add(joemama);
+		
+		DoorButton leftDoor = new DoorButton(new Vector2(0,0), this, Interfaces.barricadeLeftDoor, Interfaces.removeBarricadeLeftDoor, 130, 360);
+		DoorButton rightDoor = new DoorButton(new Vector2(1140,0), this, Interfaces.barricadeRightDoor, Interfaces.removeBarricadeRightDoor, 130, 360);
+		
+		add(rightDoor);
+		
+		add(leftDoor);
 		
 		miasmajesty = new BClip("rainloop.wav");
 		wolves = new BClip("wolves.wav");
@@ -76,12 +112,14 @@ public class TestScene extends Scene {
 		
 		
 		this.renderer.camera.setBoundaries(new Rectangle(0, 0, 1280, 0));
-		this.renderer.camera.scale(2);
+		this.renderer.camera.setScale(2);
 	}
 	
 	@Override
 	public void update() {
 		super.update();
+		
+		Logger.Log(GameState.doorleft.blocked);
 		
 		listener.position = this.renderer.camera.getCenterWorldSpace();
 		
@@ -115,6 +153,10 @@ public class TestScene extends Scene {
 		}
 		if (Input.check(Keys.S)) {
 			renderer.camera.translate(0, 4);
+		}
+		
+		if(Input.check(Keys.Space)) {
+			Game.instance.setScene(SceneManager.getScene("pause"));	
 		}
 		
 	}
